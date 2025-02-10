@@ -1,5 +1,7 @@
 package org.jboss.pnc.konflux;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -23,8 +25,8 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.ResourceArg;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.core.Vertx;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import io.vertx.core.http.HttpResponseExpectation;
+import io.vertx.ext.web.client.WebClient;
 
 @QuarkusTest
 @QuarkusTestResource(
@@ -53,6 +55,22 @@ public class PipelineTest {
         if (vertx != null) {
             vertx.close();
         }
+    }
+
+    @Test
+    public void testVertxServer() throws InterruptedException {
+
+        PipelineNotification body = new PipelineNotification(PipelineStatus.Failed, "123", null);
+
+        WebClient.create(vertx)
+                .put(CallbackHandler.port, "localhost", "/internal/completed")
+                .sendJson(body)
+                .expecting(HttpResponseExpectation.SC_SUCCESS);
+
+        PipelineNotification pipelineNotification = completed.take();
+
+        assertEquals(body.getStatus(), pipelineNotification.getStatus());
+        assertEquals(body.getBuildId(), pipelineNotification.getBuildId());
     }
 
     // TODO: Create further tests using different url/buildScript/scmRevision for Gradle/Ant/etc

@@ -15,6 +15,9 @@ public class CallbackHandler extends AbstractVerticle {
 
     private static final Logger logger = LoggerFactory.getLogger(CallbackHandler.class);
 
+    // Do not change this - firewalls in REQ5534435 / RITM2008631 have been changed to allow this.
+    static final int port = 8082;
+
     @Override
     public void start(Promise<Void> promise) {
         Router router = Router.router(vertx);
@@ -30,7 +33,7 @@ public class CallbackHandler extends AbstractVerticle {
         vertx.createHttpServer()
                 .requestHandler(router)
                 .listen(
-                        8082,
+                        port,
                         result -> {
                             if (result.succeeded()) {
                                 promise.complete();
