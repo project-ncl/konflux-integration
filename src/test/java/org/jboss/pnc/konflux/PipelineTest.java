@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +77,9 @@ public class PipelineTest {
     // TODO: Create further tests using different url/buildScript/scmRevision for Gradle/Ant/etc
     @Test
     @Timeout(value = 10, unit = TimeUnit.MINUTES)
+    // Only run this test if a custom KUBECONFIG configuration file with an appropriate token for
+    // the openshift cluster exists.
+    @EnabledIfEnvironmentVariable(named = "KUBECONFIG", matches = ".*")
     public void testMavenPipeline() throws InterruptedException {
         // A very simple repository that still deploys a jar.
         String url = "https://github.com/project-ncl/ide-config/";

@@ -78,9 +78,6 @@ spec:
   workspaces:
     - name: source
       description: Workspace containing the source code
-    # - name: ssh-directory
-    # configMap:
-    #   name: ssh-directory
   tasks:
     - name: git-clone
       params:
@@ -102,8 +99,6 @@ spec:
       workspaces:
         - name: output
           workspace: source
-        # - name: ssh-directory
-        #   workspace: ssh-directory
     - name: pre-build
       runAfter:
         - git-clone
