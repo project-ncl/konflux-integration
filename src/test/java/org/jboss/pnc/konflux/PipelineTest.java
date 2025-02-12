@@ -2,8 +2,6 @@ package org.jboss.pnc.konflux;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import jakarta.inject.Inject;
@@ -43,8 +41,6 @@ public class PipelineTest {
 
     static Vertx vertx;
 
-    static BlockingQueue<PipelineNotification> completed = new ArrayBlockingQueue<>(1);
-
     @BeforeAll
     public static void init() throws Exception {
         vertx = Vertx.vertx();
@@ -68,7 +64,7 @@ public class PipelineTest {
                 .sendJson(body)
                 .expecting(HttpResponseExpectation.SC_SUCCESS);
 
-        PipelineNotification pipelineNotification = completed.take();
+        PipelineNotification pipelineNotification = CallbackHandler.completed.take();
 
         assertEquals(body.getStatus(), pipelineNotification.getStatus());
         assertEquals(body.getBuildId(), pipelineNotification.getBuildId());
@@ -114,7 +110,7 @@ public class PipelineTest {
 
         logger.info("Got response {}", b);
 
-        PipelineNotification notification = completed.take();
+        PipelineNotification notification = CallbackHandler.completed.take();
 
         logger.info("Got notification {}", notification);
 

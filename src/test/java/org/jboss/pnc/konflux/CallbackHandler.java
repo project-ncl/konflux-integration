@@ -1,5 +1,8 @@
 package org.jboss.pnc.konflux;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 import org.jboss.pnc.api.konfluxbuilddriver.dto.PipelineNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,8 @@ public class CallbackHandler extends AbstractVerticle {
 
     private static final Logger logger = LoggerFactory.getLogger(CallbackHandler.class);
 
+    static BlockingQueue<PipelineNotification> completed = new ArrayBlockingQueue<>(1);
+
     // Do not change this - firewalls in REQ5534435 / RITM2008631 have been changed to allow this.
     static final int port = 8082;
 
@@ -26,7 +31,7 @@ public class CallbackHandler extends AbstractVerticle {
         route.handler(ctx -> {
             var result = ctx.body().asJsonObject().mapTo(PipelineNotification.class);
             logger.info("Received notification: {}", result);
-            PipelineTest.completed.add(result);
+            completed.add(result);
             ctx.response().setStatusCode(200).end("Received");
         });
 
