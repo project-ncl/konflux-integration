@@ -111,7 +111,7 @@ spec:
         - pnc-prebuild-git-clone-oci-ta
       params:
         - name: SOURCE_ARTIFACT
-          value: $(tasks.pnc-prebuild-git-clone-oci-ta.results.PRE_BUILD_IMAGE_DIGEST)
+          value: $(tasks.pnc-prebuild-git-clone-oci-ta.results.SOURCE_ARTIFACT)
         - name: IMAGE # output image
           value: $(params.QUAY_REPO):build-$(context.pipelineRun.name)
         - name: DOCKERFILE # local path to the containerfile
