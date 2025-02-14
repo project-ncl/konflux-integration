@@ -84,6 +84,8 @@ spec:
           value: $(params.REVISION)
         - name: verbose
           value: 'true'
+        - name: ociStorage
+          value: $(params.QUAY_REPO):trusted-source-$(context.pipelineRun.name)
         - name: RECIPE_IMAGE
           value: $(params.RECIPE_IMAGE)
         - name: BUILD_TOOL
