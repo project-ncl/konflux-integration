@@ -100,7 +100,7 @@ spec:
           - name: name
             value: pnc-prebuild-git-clone-oci-ta
           - name: bundle
-            value: quay.io/konflux-ci/tekton-catalog/pnc-prebuild-git-clone-oci-ta:0.1
+            value: quay.io/konflux-ci/tekton-catalog/task-pnc-prebuild-git-clone-oci-ta:0.1
           - name: kind
             value: task
 
